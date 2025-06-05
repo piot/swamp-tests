@@ -1,0 +1,61 @@
+use core::{assert}
+use std::{print}
+
+const TEST_TRUTH = true
+const TEST_VALUE = 100
+
+struct Point {
+  x: Int,
+  y: Int,
+}
+
+#[test]
+fn bool_constant() {
+  assert(TEST_TRUTH, 'constant is not working')
+}
+
+#[test]
+fn simple_constant() {
+  assert(TEST_VALUE == 100, 'constant is not working')
+}
+
+const POINT = Point { x: 10, y: 20 }
+
+#[test]
+fn aggregate() {
+  assert(POINT.x == 10, 'constant is not working')
+  assert(POINT.y == 20, 'constant is not working')
+}
+
+struct Level {
+  some_data: [Int; 20],
+}
+
+fn create_level() -> Level {
+  mut level = Level {
+    some_data: [
+      10,
+      20,
+      30,
+    ],
+  }
+
+  for i in 0..10 {
+    level.some_data[i] = (i + 1) * 2 + 10
+  }
+
+  level
+}
+
+/// In Swamp, constants have no restrictions on their values. They work like a normal function,
+/// but they are called before the rest of the program runs and their values are stored in a special
+/// area of the memory. When other parts of the program access them, their precomputed values are just copied into
+/// the destination.
+const CALCULATED = create_level()
+
+#[test]
+fn calculated() {
+    assert(CALCULATED.some_data[ 0] == 12, 'constant is not working (0)  {CALCULATED.some_data[ 0]}')
+    assert(CALCULATED.some_data[ 3] == 18, 'constant is not working (3)  {CALCULATED.some_data[ 3]}')
+    assert(CALCULATED.some_data[12] == 0, 'constant is not working (12) {CALCULATED.some_data[ 12]}')
+}
